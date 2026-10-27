@@ -1,0 +1,21 @@
+row_id,record_type,asset_and_building,inspection_id,inspection_date,inspection_kind,inspector_role,finding_id,defect_text,found_date,due_date,status,completion_date,detection_id,detected_date
+row-01,finding,asset-synth-01|bldg-synth-01,insp-synth-01,2026-09-01,comprehensive,ROLE-FE-01,finding-synth-01,Switchboard insulation resistance degradation,2026-09-01,2026-09-15,open,,,
+row-02,finding,asset-synth-02|bldg-synth-01,insp-synth-01,2026-09-01,comprehensive,ROLE-FE-01,finding-synth-02,Emergency lighting battery capacity insufficient,2026-09-01,2026-10-10,open,,,
+row-03,finding,asset-synth-03|bldg-synth-02,insp-synth-02,2026-10-05,regular,ROLE-PE-01,finding-synth-03,Distribution board cable thermal discoloration,2026-10-05,2026-10-27,open,,,
+row-04,finding,asset-synth-04|bldg-synth-02,insp-synth-02,2026-10-05,regular,ROLE-PE-01,finding-synth-04,Fire shutter guide rail obstacle detected,2026-10-05,2026-11-15,open,,,
+row-05,finding,asset-synth-05|bldg-synth-03,insp-synth-03,2026-10-10,annual,ROLE-FE-02,finding-synth-05,Transformer cooling fan abnormal vibration,2026-10-10,2026-12-01,open,,,
+row-06,finding,asset-synth-06|bldg-synth-03,insp-synth-03,2026-10-10,annual,ROLE-FE-02,finding-synth-06,Fire pump pressure gauge zero point deviation,2026-10-10,2026-10-20,open,,,
+row-07,finding,asset-synth-01|bldg-synth-01,insp-synth-04,2026-08-10,regular,ROLE-FE-01,finding-synth-07,Loose terminal screw on main breaker,2026-08-10,2026-09-30,done,2026-09-20,,
+row-08,finding,asset-synth-07|bldg-synth-01,insp-synth-04,2026-08-10,regular,ROLE-FE-01,finding-synth-08,Corrosion on fire hydrant valve packing,2026-08-10,2026-10-15,done,2026-10-05,,
+row-09,finding,asset-synth-03|bldg-synth-02,insp-synth-05,2026-09-12,regular,ROLE-PE-01,finding-synth-09,High resistance earthing conductor connection,2026-09-12,2026-10-20,done,2026-10-15,,
+row-10,finding,asset-synth-08|bldg-synth-03,insp-synth-06,2026-09-25,annual,ROLE-FE-02,finding-synth-10,Smoke detector sensitivity threshold fault,2026-09-25,2026-11-01,done,2026-10-25,,
+row-11,detection,asset-synth-01|bldg-synth-01,,,,,,,,,,,det-synth-01,2026-10-01
+row-12,detection,asset-synth-03|bldg-synth-02,,,,,,,,,,,det-synth-02,2026-10-12
+row-13,finding,asset-synth-02|bldg-synth-01,insp-synth-07,2026-10-15,regular,ROLE-FE-01,finding-synth-13,Emergency generator starting battery fault,2026-10-15,,open,,,
+row-14,finding,asset-synth-04|bldg-synth-02,insp-synth-08,2026-10-16,regular,ROLE-PE-01,finding-synth-14,Fire door self-closer hydraulic leakage,2026-10-16,not-a-date,open,,,
+row-15,finding,asset-synth-05|bldg-synth-03,insp-synth-09,2026-09-01,annual,ROLE-FE-02,finding-synth-15,Busbar joint contact resistance anomaly,2026-09-01,2026-09-30,done,,,
+row-16,finding,asset-synth-06|bldg-synth-03,insp-synth-09,2026-09-01,annual,ROLE-FE-02,finding-synth-16,Sprinkler head clearance obstruction,2026-09-01,2026-10-05,done,,,
+row-17,finding,asset-synth-01|bldg-synth-01,insp-synth-10,2026-10-18,regular,ROLE-FE-01,finding-synth-17,Substation grounding mesh inspection warning,2026-10-18,2026-11-10,open,2026-10-20,,
+row-18,finding,|bldg-synth-01,insp-synth-11,2026-10-19,regular,ROLE-FE-01,finding-synth-18,Missing asset reference in distribution panel,2026-10-19,2026-11-20,open,,,
+row-19,finding,asset-synth-07|bldg-synth-01,insp-synth-12,2026-10-20,regular,ROLE-FE-01,finding-synth-19,Unapproved status enum test finding,2026-10-20,2026-11-25,in_progress,,,
+row-20,finding,asset-synth-08|bldg-synth-03,insp-synth-13,bad-date,annual,ROLE-FE-02,finding-synth-20,Invalid date transformation test finding,2026-10-21,2026-11-30,open,,,

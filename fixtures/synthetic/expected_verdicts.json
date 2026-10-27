@@ -1,0 +1,65 @@
+{
+  "fixtures_count": 20,
+  "verdicts": [
+    { "row_id": "row-01", "verdict": "accept" },
+    { "row_id": "row-02", "verdict": "accept" },
+    { "row_id": "row-03", "verdict": "accept" },
+    { "row_id": "row-04", "verdict": "accept" },
+    { "row_id": "row-05", "verdict": "accept" },
+    { "row_id": "row-06", "verdict": "accept" },
+    { "row_id": "row-07", "verdict": "accept" },
+    { "row_id": "row-08", "verdict": "accept" },
+    { "row_id": "row-09", "verdict": "accept" },
+    { "row_id": "row-10", "verdict": "accept" },
+    { "row_id": "row-11", "verdict": "accept" },
+    { "row_id": "row-12", "verdict": "accept" },
+    {
+      "row_id": "row-13",
+      "verdict": "quarantine",
+      "violated_shape": "FindingHasDeadlineShape",
+      "reason": "Missing due_date for finding"
+    },
+    {
+      "row_id": "row-14",
+      "verdict": "quarantine",
+      "violated_shape": "FindingHasDeadlineShape",
+      "reason": "Invalid due_date format"
+    },
+    {
+      "row_id": "row-15",
+      "verdict": "quarantine",
+      "violated_shape": "CompletedRemediationHasDateShape",
+      "reason": "Completed remediation without completion_date"
+    },
+    {
+      "row_id": "row-16",
+      "verdict": "quarantine",
+      "violated_shape": "CompletedRemediationHasDateShape",
+      "reason": "Completed remediation without completion_date"
+    },
+    {
+      "row_id": "row-17",
+      "verdict": "quarantine",
+      "violated_shape": "DateImpliesCompletedShape",
+      "reason": "Completion date provided but status is open"
+    },
+    {
+      "row_id": "row-18",
+      "verdict": "quarantine",
+      "violated_shape": "InspectionHasOneAssetShape",
+      "reason": "Inspection missing inspected asset key"
+    },
+    {
+      "row_id": "row-19",
+      "verdict": "quarantine",
+      "violated_shape": "NoFabricatedValueShape",
+      "reason": "Unapproved enum value for status: in_progress"
+    },
+    {
+      "row_id": "row-20",
+      "verdict": "quarantine",
+      "violated_shape": "NoFabricatedValueShape",
+      "reason": "Transformation failed for inspection_date: bad-date"
+    }
+  ]
+}

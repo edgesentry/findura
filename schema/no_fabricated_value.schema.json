@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://edgesentry.github.io/inspectra/schema/no_fabricated_value.schema.json",
+  "title": "NoFabricatedValueShape",
+  "description": "All core property values must be derived from source fields with approved transformation.",
+  "type": "object",
+  "required": ["provenance", "has_fabricated_value"],
+  "properties": {
+    "has_fabricated_value": {
+      "const": false
+    },
+    "provenance": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["source_record_id", "source_field_name", "source_field_value"],
+        "properties": {
+          "source_record_id": { "type": "string", "minLength": 1 },
+          "source_field_name": { "type": "string", "minLength": 1 },
+          "source_field_value": { "type": "string" },
+          "rule_matched": { "const": true }
+        }
+      }
+    }
+  }
+}

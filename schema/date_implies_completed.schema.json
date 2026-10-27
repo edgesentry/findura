@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://edgesentry.github.io/inspectra/schema/date_implies_completed.schema.json",
+  "title": "DateImpliesCompletedShape",
+  "description": "A remediation with a completion date must have completed flag set to true.",
+  "type": "object",
+  "properties": {
+    "remediation": {
+      "type": "object",
+      "properties": {
+        "completed": { "type": "boolean" },
+        "completed_on": { "type": ["string", "null"] }
+      },
+      "if": {
+        "properties": {
+          "completed_on": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          }
+        },
+        "required": ["completed_on"]
+      },
+      "then": {
+        "properties": {
+          "completed": { "const": true }
+        },
+        "required": ["completed"]
+      }
+    }
+  }
+}

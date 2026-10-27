@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://edgesentry.github.io/inspectra/schema/completed_remediation_has_date.schema.json",
+  "title": "CompletedRemediationHasDateShape",
+  "description": "A completed remediation must have a completion date.",
+  "type": "object",
+  "properties": {
+    "remediation": {
+      "type": "object",
+      "required": ["completed"],
+      "properties": {
+        "completed": { "type": "boolean" },
+        "completed_on": {
+          "type": ["string", "null"],
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        }
+      },
+      "if": {
+        "properties": { "completed": { "const": true } }
+      },
+      "then": {
+        "required": ["completed_on"],
+        "properties": {
+          "completed_on": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          }
+        }
+      }
+    }
+  }
+}
