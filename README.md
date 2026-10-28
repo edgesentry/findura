@@ -57,9 +57,19 @@ docker compose up -d
 uv sync
 ```
 
-### 3. Run Automated Tests
+### 3. Code Quality and Tests
 
 ```bash
+# Formatting check
+uv run ruff format --check .
+
+# Linting
+uv run ruff check .
+
+# Static type checking
+uv run mypy
+
+# Automated tests
 uv run pytest -v
 ```
 

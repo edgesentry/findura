@@ -35,8 +35,11 @@ packages = ["harness"]
 
 [dependency-groups]
 dev = [
+    "mypy>=2.4.0",
     "pytest>=8.3.3",
     "ruff>=0.7.1",
+    "types-jsonschema>=4.26.0.20261006",
+    "types-pyyaml>=6.0.12.20260906",
 ]
 
 [tool.ruff]
@@ -61,3 +64,15 @@ indent-style = "space"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+
+[tool.mypy]
+python_version = "3.12"
+files = ["harness"]
+check_untyped_defs = true
+disallow_untyped_defs = false
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+strict_equality = true
+show_error_codes = true
+
