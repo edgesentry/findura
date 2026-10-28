@@ -14,9 +14,7 @@ def test_s4_query_determinism_and_overdue_logic(db_conn, repo_root: Path):
     due_on < as_of must be marked overdue.
     """
     csv_path = repo_root / "fixtures" / "synthetic" / "synthetic_inspections.csv"
-    mapping_path = (
-        repo_root / "mappings" / "sources" / "source_csv_synthetic.yaml"
-    )
+    mapping_path = repo_root / "mappings" / "sources" / "source_csv_synthetic.yaml"
 
     batch = ingest_file(csv_path, db_conn)
     mapping = load_mapping(mapping_path)

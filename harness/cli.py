@@ -30,7 +30,9 @@ def main():
         "normalize", help="Normalize raw batch using approved mapping and load into DB"
     )
     norm_p.add_argument(
-        "--file", default=None, help="Path to CSV file (if not specified, use synthetic fixture)"
+        "--file",
+        default=None,
+        help="Path to CSV file (if not specified, use synthetic fixture)",
     )
     norm_p.add_argument(
         "--mapping",
@@ -43,18 +45,14 @@ def main():
     query_p.add_argument(
         "--profile", required=True, choices=["insurer"], help="Profile name"
     )
-    query_p.add_argument(
-        "--as-of", required=True, help="Reference date (YYYY-MM-DD)"
-    )
+    query_p.add_argument("--as-of", required=True, help="Reference date (YYYY-MM-DD)")
 
     # harness pack
     pack_p = subparsers.add_parser("pack", help="Build evidence pack and run manifest")
     pack_p.add_argument(
         "--profile", required=True, choices=["insurer"], help="Profile name"
     )
-    pack_p.add_argument(
-        "--as-of", required=True, help="Reference date (YYYY-MM-DD)"
-    )
+    pack_p.add_argument("--as-of", required=True, help="Reference date (YYYY-MM-DD)")
     pack_p.add_argument(
         "--output", default=None, help="Path to output evidence pack JSON"
     )

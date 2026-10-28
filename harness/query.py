@@ -15,9 +15,7 @@ def run_insurer_query(
     profile_dir: Path | str | None = None,
 ) -> dict[str, Any]:
     base_dir = (
-        Path(profile_dir)
-        if profile_dir
-        else Path(__file__).resolve().parent.parent
+        Path(profile_dir) if profile_dir else Path(__file__).resolve().parent.parent
     )
     profile_cfg = load_profile(base_dir / "profiles" / "insurer" / "profile.yaml")
 
@@ -34,8 +32,11 @@ def run_insurer_query(
     completed_remediations = []
 
     with conn.cursor() as cur:
+
         def _strip_comments(sql: str) -> str:
-            lines = [line for line in sql.splitlines() if not line.strip().startswith("--")]
+            lines = [
+                line for line in sql.splitlines() if not line.strip().startswith("--")
+            ]
             return "\n".join(lines).upper()
 
         forbidden_wall_clock = [

@@ -71,7 +71,9 @@ def normalize_batch(
                     else:
                         has_fabricated = True
                         error_shape = "NoFabricatedValueShape"
-                        error_reason = f"Transformation failed for {src_col}: {val} ({e})"
+                        error_reason = (
+                            f"Transformation failed for {src_col}: {val} ({e})"
+                        )
                     mapped_values[target] = val
                     prov_map[target] = prov_item
 

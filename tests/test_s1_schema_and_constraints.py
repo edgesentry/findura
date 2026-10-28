@@ -12,12 +12,8 @@ def test_s1_synthetic_verdicts_match_expected(db_conn, repo_root: Path):
     Each of the 5 shapes has both accept and quarantine cases.
     """
     csv_path = repo_root / "fixtures" / "synthetic" / "synthetic_inspections.csv"
-    mapping_path = (
-        repo_root / "mappings" / "sources" / "source_csv_synthetic.yaml"
-    )
-    expected_path = (
-        repo_root / "fixtures" / "synthetic" / "expected_verdicts.json"
-    )
+    mapping_path = repo_root / "mappings" / "sources" / "source_csv_synthetic.yaml"
+    expected_path = repo_root / "fixtures" / "synthetic" / "expected_verdicts.json"
 
     with open(expected_path, "r", encoding="utf-8") as f:
         expected_data = json.load(f)
@@ -78,9 +74,7 @@ def test_s1_synthetic_verdicts_match_expected(db_conn, repo_root: Path):
 def test_s1_detections_not_in_remediations(db_conn, repo_root: Path):
     """S1: Detections (Requirement 5) must not be treated as remediations or completion."""
     csv_path = repo_root / "fixtures" / "synthetic" / "synthetic_inspections.csv"
-    mapping_path = (
-        repo_root / "mappings" / "sources" / "source_csv_synthetic.yaml"
-    )
+    mapping_path = repo_root / "mappings" / "sources" / "source_csv_synthetic.yaml"
 
     batch = ingest_file(csv_path, db_conn)
     mapping = load_mapping(mapping_path)

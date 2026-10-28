@@ -8,9 +8,7 @@ from harness.normalize import load_mapping, normalize_batch
 def test_s3_provenance_traceable_for_all_accepted_rows(db_conn, repo_root: Path):
     """S3 Exit Criteria: All accepted rows can be traced back to their source fields."""
     csv_path = repo_root / "fixtures" / "synthetic" / "synthetic_inspections.csv"
-    mapping_path = (
-        repo_root / "mappings" / "sources" / "source_csv_synthetic.yaml"
-    )
+    mapping_path = repo_root / "mappings" / "sources" / "source_csv_synthetic.yaml"
 
     batch = ingest_file(csv_path, db_conn)
     mapping = load_mapping(mapping_path)

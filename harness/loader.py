@@ -37,7 +37,8 @@ class ConstraintValidator:
                 row_id=record.row_id,
                 accepted=False,
                 violated_shape=record.validation_error_shape,
-                reason=record.validation_error_reason or "Normalization validation error",
+                reason=record.validation_error_reason
+                or "Normalization validation error",
             )
 
         payload = record.to_validation_payload()
@@ -210,7 +211,9 @@ def load_records(
                             core_table = "remediations"
                             core_id = f_key
 
-                        source_field_id = f"{prov.source_record_id}-{prov.source_field_name}"
+                        source_field_id = (
+                            f"{prov.source_record_id}-{prov.source_field_name}"
+                        )
                         cur.execute(
                             """
                             INSERT INTO value_provenance (
