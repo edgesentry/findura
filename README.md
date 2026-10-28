@@ -97,6 +97,12 @@ uv run harness pack --profile insurer --as-of 2026-10-27 --output evidence_pack.
 
 ---
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local development setup, testing guidelines, and pull request expectations.
+
+---
+
 ## License
 
 [Apache License 2.0](LICENSE)
