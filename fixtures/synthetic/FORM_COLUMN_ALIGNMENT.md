@@ -1,6 +1,6 @@
 # Statutory Form and Synthetic CSV Column Alignment (S2)
 
-**Purpose**: Rationale document deriving the columns of the synthetic test dataset (`synthetic_inspections.csv`) from the structure of statutory inspection forms in Japan and Singapore.  
+**Purpose**: Rationale document deriving the columns of the synthetic test dataset (`synthetic_inspections.csv`) from the structure of statutory inspection forms in Japan and Singapore.
 **Principles**:
 1. Mapping designed for synthetic test data verification, not a finalized legal specification for production filing.
 2. Contains no personal names; uses role and qualification identifiers (e.g., `ROLE-FE-01`, `ROLE-PE-01`).

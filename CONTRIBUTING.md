@@ -39,6 +39,14 @@ Use `uv` to create the virtual environment and install all runtime and dev depen
 uv sync
 ```
 
+### 4. (Optional) Install Git pre-commit hooks
+
+To run formatting, linting, and type checking automatically before each `git commit`:
+
+```bash
+uv run pre-commit install
+```
+
 ---
 
 ## 3. Running Checks Locally (CI Parity)

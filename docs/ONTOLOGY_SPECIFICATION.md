@@ -1,9 +1,9 @@
 # Findura Core Ontology Specification
 
-**Version**: 0.1.0 (Phase 1: Minimal Deterministic Core)  
-**Status**: Active implementation (PostgreSQL DDL & JSON Schema)  
-**Provisional Token**: `insp:`  
-**Provisional URN**: `urn:insp:provisional:`  
+**Version**: 0.1.0 (Phase 1: Minimal Deterministic Core)
+**Status**: Active implementation (PostgreSQL DDL & JSON Schema)
+**Provisional Token**: `insp:`
+**Provisional URN**: `urn:insp:provisional:`
 
 ---
 
