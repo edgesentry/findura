@@ -3,8 +3,43 @@ name = "findura"
 version = "0.1.0"
 description = "Common inspection ontology and deterministic agent harness OSS core"
 readme = "README.md"
-license = { text = "Apache-2.0" }
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 requires-python = ">=3.12"
+authors = [
+    { name = "Yohei Onishi", email = "yohei.onishi11@gmail.com" },
+]
+maintainers = [
+    { name = "EdgeSentry", email = "yohei.onishi11@gmail.com" },
+]
+keywords = [
+    "inspection",
+    "ontology",
+    "building-inspection",
+    "property-insurance",
+    "insurance",
+    "remediation",
+    "audit",
+    "evidence-pack",
+    "agent-harness",
+    "deterministic",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Database",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
 dependencies = [
     "jsonschema>=4.23.0",
     "psycopg[binary]>=3.2.3",
