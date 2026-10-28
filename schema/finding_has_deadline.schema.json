@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://edgesentry.github.io/inspectra/schema/finding_has_deadline.schema.json",
+  "$id": "https://edgesentry.github.io/findura/schema/finding_has_deadline.schema.json",
   "title": "FindingHasDeadlineShape",
   "description": "Each Finding must have exactly one Deadline with due_on date specified.",
   "type": "object",

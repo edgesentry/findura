@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://edgesentry.github.io/inspectra/schema/inspection_has_one_asset.schema.json",
+  "$id": "https://edgesentry.github.io/findura/schema/inspection_has_one_asset.schema.json",
   "title": "InspectionHasOneAssetShape",
   "description": "An inspection must have exactly one inspected asset.",
   "type": "object",

@@ -11,9 +11,9 @@ def get_connection_string() -> str:
 
     host = os.environ.get("POSTGRES_HOST", "localhost")
     port = os.environ.get("POSTGRES_PORT", "5432")
-    user = os.environ.get("POSTGRES_USER", "inspectra")
-    password = os.environ.get("POSTGRES_PASSWORD", "inspectra_password")
-    dbname = os.environ.get("POSTGRES_DB", "inspectra")
+    user = os.environ.get("POSTGRES_USER", "findura")
+    password = os.environ.get("POSTGRES_PASSWORD", "findura_password")
+    dbname = os.environ.get("POSTGRES_DB", "findura")
 
     return f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
 

@@ -1,4 +1,4 @@
-# Inspectra Ontology Definitions
+# Findura Ontology Definitions
 
 **Status**: Phase 1 (Pattern 3: PostgreSQL + JSON Schema) in progress.  
 **Specification**: See [docs/ONTOLOGY_SPECIFICATION.md](../docs/ONTOLOGY_SPECIFICATION.md) for the complete 8-class core specification, properties matrix, statutory origins, and validity justification.  

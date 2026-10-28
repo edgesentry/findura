@@ -17,9 +17,9 @@ jobs:
       postgres:
         image: postgres:16-alpine
         env:
-          POSTGRES_USER: inspectra
-          POSTGRES_PASSWORD: inspectra_password
-          POSTGRES_DB: inspectra
+          POSTGRES_USER: findura
+          POSTGRES_PASSWORD: findura_password
+          POSTGRES_DB: findura
         ports:
           - 5432:5432
         options: >-
@@ -65,7 +65,7 @@ jobs:
         env:
           POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432
-          POSTGRES_USER: inspectra
-          POSTGRES_PASSWORD: inspectra_password
-          POSTGRES_DB: inspectra
+          POSTGRES_USER: findura
+          POSTGRES_PASSWORD: findura_password
+          POSTGRES_DB: findura
         run: uv run pytest -v

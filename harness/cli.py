@@ -14,7 +14,7 @@ from harness.query import run_insurer_query
 def main():
     parser = argparse.ArgumentParser(
         prog="harness",
-        description="Inspectra deterministic inspection agent harness CLI",
+        description="Findura deterministic inspection agent harness CLI",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 

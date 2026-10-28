@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://edgesentry.github.io/inspectra/schema/no_fabricated_value.schema.json",
+  "$id": "https://edgesentry.github.io/findura/schema/no_fabricated_value.schema.json",
   "title": "NoFabricatedValueShape",
   "description": "All core property values must be derived from source fields with approved transformation.",
   "type": "object",
