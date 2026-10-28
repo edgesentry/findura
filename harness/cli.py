@@ -9,6 +9,7 @@ from harness.models import RunManifest
 from harness.normalize import load_mapping, normalize_batch
 from harness.pack import build_evidence_pack
 from harness.query import run_insurer_query
+from harness.resources import get_default_fixture_path, get_default_mapping_path
 
 
 def main():
@@ -32,12 +33,12 @@ def main():
     norm_p.add_argument(
         "--file",
         default=None,
-        help="Path to CSV file (if not specified, use synthetic fixture)",
+        help="Path to CSV file (relative to CWD; if not specified, uses bundled synthetic fixture)",
     )
     norm_p.add_argument(
         "--mapping",
-        default="mappings/sources/source_csv_synthetic.yaml",
-        help="Path to mapping YAML",
+        default=None,
+        help="Path to mapping YAML (relative to CWD; if not specified, uses bundled synthetic mapping)",
     )
 
     # harness query
@@ -72,9 +73,10 @@ def main():
         print("ReviewGate: 0 pending candidates in queue (Phase 1 mode).")
 
     elif args.command == "normalize":
-        file_path = args.file or "fixtures/synthetic/synthetic_inspections.csv"
+        file_path = args.file or str(get_default_fixture_path())
+        mapping_path = args.mapping or str(get_default_mapping_path())
         batch = ingest_file(file_path, conn)
-        mapping = load_mapping(args.mapping)
+        mapping = load_mapping(mapping_path)
         records = normalize_batch(batch, mapping)
         verdicts = load_records(
             records,
@@ -95,9 +97,9 @@ def main():
 
     elif args.command == "pack":
         # Run query and build evidence pack
-        file_path = "fixtures/synthetic/synthetic_inspections.csv"
+        file_path = str(get_default_fixture_path())
         batch = ingest_file(file_path, conn)
-        mapping = load_mapping("mappings/sources/source_csv_synthetic.yaml")
+        mapping = load_mapping(get_default_mapping_path())
 
         # Ensure DB has data
         with conn.cursor() as cur:
