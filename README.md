@@ -69,7 +69,7 @@ uv run ruff check .
 # Static type checking
 uv run mypy
 
-# Automated tests
+# Automated tests with coverage gate (>=80% floor)
 uv run pytest -v
 ```
 
