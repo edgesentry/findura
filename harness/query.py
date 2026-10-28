@@ -3,6 +3,8 @@ from typing import Any
 
 import yaml
 
+from harness.resources import get_resource_path
+
 
 def load_profile(profile_path: str | Path) -> dict[str, Any]:
     with open(profile_path, "r", encoding="utf-8") as f:
@@ -14,13 +16,23 @@ def run_insurer_query(
     as_of: str,
     profile_dir: Path | str | None = None,
 ) -> dict[str, Any]:
-    base_dir = (
-        Path(profile_dir) if profile_dir else Path(__file__).resolve().parent.parent
-    )
-    profile_cfg = load_profile(base_dir / "profiles" / "insurer" / "profile.yaml")
-
-    open_sql_path = base_dir / profile_cfg["queries"]["open_findings"]
-    comp_sql_path = base_dir / profile_cfg["queries"]["completed_remediations"]
+    if profile_dir:
+        base_dir = Path(profile_dir)
+        profile_path = (
+            base_dir / "profiles" / "insurer" / "profile.yaml"
+            if (base_dir / "profiles").exists()
+            else base_dir / "profile.yaml"
+        )
+        profile_cfg = load_profile(profile_path)
+        open_sql_path = base_dir / profile_cfg["queries"]["open_findings"]
+        comp_sql_path = base_dir / profile_cfg["queries"]["completed_remediations"]
+    else:
+        profile_path = get_resource_path("profiles/insurer/profile.yaml")
+        profile_cfg = load_profile(profile_path)
+        open_sql_path = get_resource_path(profile_cfg["queries"]["open_findings"])
+        comp_sql_path = get_resource_path(
+            profile_cfg["queries"]["completed_remediations"]
+        )
 
     with open(open_sql_path, "r", encoding="utf-8") as f:
         open_sql = f.read()

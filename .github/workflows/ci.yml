@@ -73,3 +73,27 @@ jobs:
           POSTGRES_PASSWORD: findura_password
           POSTGRES_DB: findura
         run: uv run pytest -v
+
+      - name: Verify wheel packaging smoke test in clean environment
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: findura
+          POSTGRES_PASSWORD: findura_password
+          POSTGRES_DB: findura
+        run: |
+          uv build --wheel --out-dir /tmp/smoke-dist
+          wheel_file=$(ls /tmp/smoke-dist/findura-*.whl | head -n 1)
+          uv venv /tmp/smoke-env
+          uv pip install --python /tmp/smoke-env/bin/python "$wheel_file"
+          cd /tmp
+          /tmp/smoke-env/bin/python -c "
+          from harness.db import get_connection, init_db
+          from harness.query import run_insurer_query
+          conn = get_connection()
+          init_db(conn)
+          res = run_insurer_query(conn, as_of='2026-10-27')
+          assert 'open_findings' in res
+          print('Clean installed wheel successfully ran init_db and insurer query outside git checkout!')
+          "
+          /tmp/smoke-env/bin/harness --help

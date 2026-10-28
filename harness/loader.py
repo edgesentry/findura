@@ -5,12 +5,13 @@ from typing import Any
 import jsonschema
 
 from harness.models import NormalizedRecord, ValidationVerdict
+from harness.resources import get_schema_dir
 
 
 class ConstraintValidator:
     def __init__(self, schema_dir: Path | str | None = None):
         if schema_dir is None:
-            schema_dir = Path(__file__).resolve().parent.parent / "schema"
+            schema_dir = get_schema_dir()
         else:
             schema_dir = Path(schema_dir)
 

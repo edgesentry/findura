@@ -65,19 +65,23 @@ uv run pytest -v
 
 ### 4. CLI Execution Examples
 
+When installed via `pip` or `uv`, the package bundles all default schemas, queries, mappings, and synthetic fixtures:
+
 ```bash
-# Ingest raw source data
+# Ingest raw source data (file argument is resolved relative to CWD)
 uv run harness ingest fixtures/synthetic/synthetic_inspections.csv
 
-# Normalize and load (conforming records to core tables, non-conforming to quarantine)
-uv run harness normalize --mapping mappings/sources/source_csv_synthetic.yaml
+# Normalize and load (defaults to bundled synthetic fixture and mapping; --file and --mapping resolve relative to CWD)
+uv run harness normalize
 
 # Query insurer profile (reference date: 2026-10-27)
 uv run harness query --profile insurer --as-of 2026-10-27
 
-# Build evidence pack
+# Build evidence pack (output file written relative to CWD)
 uv run harness pack --profile insurer --as-of 2026-10-27 --output evidence_pack.json
 ```
+
+> **Note on CLI paths**: User-supplied path flags (`--file`, `--mapping`, `--output`) resolve relative to the current working directory. If omitted, `normalize` and `pack` automatically fall back to the package-bundled synthetic fixtures and mappings.
 
 ---
 
