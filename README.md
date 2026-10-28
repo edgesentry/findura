@@ -11,6 +11,7 @@ Prior to property & casualty (fire and property insurance) renewals, Inspectra s
 - **Common Inspection Ontology (8 Core Classes & 5 Shapes)**:
   - `Building`, `Asset`, `Inspection`, `Finding`, `Deadline`, `Remediation`, `Detection`, `SourceRecord`
   - 5 Shape Constraints (`FindingHasDeadlineShape`, `CompletedRemediationHasDateShape`, `DateImpliesCompletedShape`, `InspectionHasOneAssetShape`, `NoFabricatedValueShape`)
+  - Detailed formal specification, statutory origins, and validity justification documented in [docs/ONTOLOGY_SPECIFICATION.md](docs/ONTOLOGY_SPECIFICATION.md).
 - **Deterministic Harness**:
   - Ingestion (`ingest`): Raw-byte SHA-256 ingestion with property-level provenance tracking
   - Normalization (`normalize`): Pure-function transformation driven by approved mapping YAML (v0)
@@ -29,6 +30,7 @@ Prior to property & casualty (fire and property insurance) renewals, Inspectra s
 
 ```text
 inspectra/
+├── docs/                   # Core ontology specifications and architecture rationale
 ├── schema/                 # Database schema (tables.sql) and 5 JSON Schema shapes
 ├── ontology/               # Ontology definitions (RDF/SHACL vocabularies planned for Phase 3)
 ├── mappings/sources/       # Mapping definitions v0 (source_csv_synthetic.yaml)
