@@ -2,9 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [main, "feat/*"]
+    branches: [main, "feat/**"]
   pull_request:
     branches: [main]
+
+permissions:
+  contents: read
 
 jobs:
   test:
@@ -26,12 +29,28 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          git init -q -b ci
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          auth="$(printf 'x-access-token:%s' "${GH_TOKEN}" | base64 -w 0)"
+          git config --local "http.https://github.com/.extraheader" "AUTHORIZATION: basic ${auth}"
+          if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
+            ref="refs/pull/${PR_NUMBER}/merge"
+          else
+            ref="${GITHUB_REF}"
+          fi
+          git fetch --no-tags --depth=1 origin "+${ref}:refs/remotes/origin/ci"
+          git checkout --force refs/remotes/origin/ci
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
-        with:
-          enable-cache: true
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Set up Python
         run: uv python install 3.12
