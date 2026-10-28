@@ -59,7 +59,10 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
-      - name: Run static analysis (ruff)
+      - name: Run code formatting check (ruff format)
+        run: uv run ruff format --check .
+
+      - name: Run static analysis (ruff check)
         run: uv run ruff check .
 
       - name: Run automated tests (pytest)

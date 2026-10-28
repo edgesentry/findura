@@ -49,9 +49,7 @@ class NormalizedRecord:
         payload = dict(self.data)
         payload["record_type"] = self.record_type
         payload["has_fabricated_value"] = self.has_fabricated_value
-        payload["provenance"] = {
-            k: v.to_dict() for k, v in self.provenance.items()
-        }
+        payload["provenance"] = {k: v.to_dict() for k, v in self.provenance.items()}
         return payload
 
 

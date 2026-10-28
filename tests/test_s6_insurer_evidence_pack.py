@@ -20,9 +20,7 @@ def test_s6_evidence_pack_regeneration_and_schema(db_conn, repo_root: Path):
        re-query at as_of, and confirm exact result & hash match.
     """
     csv_path = repo_root / "fixtures" / "synthetic" / "synthetic_inspections.csv"
-    mapping_path = (
-        repo_root / "mappings" / "sources" / "source_csv_synthetic.yaml"
-    )
+    mapping_path = repo_root / "mappings" / "sources" / "source_csv_synthetic.yaml"
 
     batch = ingest_file(csv_path, db_conn)
     mapping = load_mapping(mapping_path)
