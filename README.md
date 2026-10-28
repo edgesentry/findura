@@ -2,7 +2,7 @@
 
 **Inspectra** is an open-source (Apache-2.0) core implementation of a common inspection ontology and deterministic agent harness for operational building inspection and remediation records.
 
-Prior to property & casualty (fire and property insurance) renewals, Inspectra serves as a neutral data integration layer without replacing existing inspection frontends (e.g., Kaminashi [カミナシ]), providing evidence packs for open findings, overdue deadlines, and completed remediations with complete reproducibility.
+Prior to property & casualty (fire and property insurance) renewals, Inspectra serves as a neutral data integration layer without replacing existing field inspection software or frontends, providing evidence packs for open findings, overdue deadlines, and completed remediations with complete reproducibility.
 
 ---
 

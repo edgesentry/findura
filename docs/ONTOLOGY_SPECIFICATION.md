@@ -11,7 +11,7 @@
 
 Inspectra provides a common, neutral inspection ontology and deterministic agent harness for operational building compliance, defect tracking, and insurance renewal verification.
 
-Rather than replacing existing inspection frontends (e.g., Kaminashi [カミナシ]) or imposing monolithic building models, Inspectra acts as a neutral data integration layer. It standardizes heterogeneous inspection and monitoring logs into a minimal, factual representation required for property and casualty (fire and property insurance) renewals.
+Rather than replacing existing field inspection software or imposing monolithic building models, Inspectra acts as a neutral data integration layer. It standardizes heterogeneous inspection and monitoring logs into a minimal, factual representation required for property and casualty (fire and property insurance) renewals.
 
 The lifecycle consists of a two-stage deterministic pipeline:
 1. **Raw Ingestion & Provenance**: Raw bytes are captured with SHA-256 hashes in `source_records`, and individual raw column values are stored in `source_fields`.
