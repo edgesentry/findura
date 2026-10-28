@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://edgesentry.github.io/inspectra/schema/completed_remediation_has_date.schema.json",
+  "$id": "https://edgesentry.github.io/findura/schema/completed_remediation_has_date.schema.json",
   "title": "CompletedRemediationHasDateShape",
   "description": "A completed remediation must have a completion date.",
   "type": "object",

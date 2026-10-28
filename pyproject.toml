@@ -1,5 +1,5 @@
 [project]
-name = "inspectra"
+name = "findura"
 version = "0.1.0"
 description = "Common inspection ontology and deterministic agent harness OSS core"
 readme = "README.md"

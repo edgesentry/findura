@@ -1,12 +1,12 @@
 services:
   db:
     image: postgres:16-alpine
-    container_name: inspectra-postgres
+    container_name: findura-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: inspectra
-      POSTGRES_PASSWORD: inspectra_password
-      POSTGRES_DB: inspectra
+      POSTGRES_USER: findura
+      POSTGRES_PASSWORD: findura_password
+      POSTGRES_DB: findura
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:

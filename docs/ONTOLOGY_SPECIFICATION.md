@@ -1,4 +1,4 @@
-# Inspectra Core Ontology Specification
+# Findura Core Ontology Specification
 
 **Version**: 0.1.0 (Phase 1: Minimal Deterministic Core)  
 **Status**: Active implementation (PostgreSQL DDL & JSON Schema)  
@@ -9,9 +9,9 @@
 
 ## 1. Scope & System Architecture
 
-Inspectra provides a common, neutral inspection ontology and deterministic agent harness for operational building compliance, defect tracking, and insurance renewal verification.
+Findura provides a common, neutral inspection ontology and deterministic agent harness for operational building compliance, defect tracking, and insurance renewal verification.
 
-Rather than replacing existing field inspection software or imposing monolithic building models, Inspectra acts as a neutral data integration layer. It standardizes heterogeneous inspection and monitoring logs into a minimal, factual representation required for property and casualty (fire and property insurance) renewals.
+Rather than replacing existing field inspection software or imposing monolithic building models, Findura acts as a neutral data integration layer. It standardizes heterogeneous inspection and monitoring logs into a minimal, factual representation required for property and casualty (fire and property insurance) renewals.
 
 The lifecycle consists of a two-stage deterministic pipeline:
 1. **Raw Ingestion & Provenance**: Raw bytes are captured with SHA-256 hashes in `source_records`, and individual raw column values are stored in `source_fields`.
@@ -73,7 +73,7 @@ Every normalized attribute in core tables links to `insp:SourceField` via `prov:
 
 ## 4. The 5 Core Shape Constraints
 
-Inspectra enforces five core shape constraints across all ingestion channels:
+Findura enforces five core shape constraints across all ingestion channels:
 
 1. **`FindingHasDeadlineShape`**:
    - Every finding MUST have an associated deadline with a valid target date (`due_on`).
@@ -114,20 +114,20 @@ The classes, attributes, and constraints are derived from three foundational sou
 
 ### 3. Property & Casualty Insurance Underwriting Realities
 - Insurers during renewal require proof of risk maintenance: **"When was it inspected, who conducted it, what defects were found, what was the deadline, and when was it verified fixed?"**
-- Inspectra extracts this minimal factual kernel without exposing private insurer rating algorithms or forcing building operators to change their inspection tools.
+- Findura extracts this minimal factual kernel without exposing private insurer rating algorithms or forcing building operators to change their inspection tools.
 
 ---
 
 ## 6. Design Rationale & Validity Justification
 
 ### Why a Minimal 8-Class Core?
-Industry ontologies like IFC/BIM, Brick Schema, or RealEstateCore contain thousands of entity types detailing geometric and spatial relationships. While valuable for construction design, they are excessive and unmanageable for operational risk underwriting. Inspectra focuses strictly on the **temporal and causal lifecycle of compliance defects**, resulting in an 8-class core that is deterministic, auditable, and easily mapped across disparate tools.
+Industry ontologies like IFC/BIM, Brick Schema, or RealEstateCore contain thousands of entity types detailing geometric and spatial relationships. While valuable for construction design, they are excessive and unmanageable for operational risk underwriting. Findura focuses strictly on the **temporal and causal lifecycle of compliance defects**, resulting in an 8-class core that is deterministic, auditable, and easily mapped across disparate tools.
 
 ### Zero Hallucination & No Value Fabrication
-When real inspection sheets contain missing data (such as blank target completion dates), conventional LLM-based ingestion pipelines often attempt to "fill in the blanks" through plausible inference. In insurance compliance, synthetic estimation constitutes evidentiary fraud. Inspectra strictly isolates non-conforming records in `quarantine_records` rather than fabricating values, guaranteeing 100% evidentiary validity.
+When real inspection sheets contain missing data (such as blank target completion dates), conventional LLM-based ingestion pipelines often attempt to "fill in the blanks" through plausible inference. In insurance compliance, synthetic estimation constitutes evidentiary fraud. Findura strictly isolates non-conforming records in `quarantine_records` rather than fabricating values, guaranteeing 100% evidentiary validity.
 
 ### Strict Separation of Detection from Remediation
-Sensors frequently fire intermittent warnings (e.g. temporary current surges). When a sensor returns to normal, it indicates that the threshold is no longer breached—it does **not** indicate that a certified engineer inspected the physical equipment and completed repairs. Inspectra strictly forbids `insp:Detection` from bearing `completed` or `completed_on` properties.
+Sensors frequently fire intermittent warnings (e.g. temporary current surges). When a sensor returns to normal, it indicates that the threshold is no longer breached—it does **not** indicate that a certified engineer inspected the physical equipment and completed repairs. Findura strictly forbids `insp:Detection` from bearing `completed` or `completed_on` properties.
 
 ### Point-in-Time Query Determinism
-Insurance underwriting verifies the risk state as of a contract renewal reference date (`as_of`). System wall-clock queries (`NOW()`, `CURRENT_DATE`) produce varying results depending on execution time. Inspectra binds all temporal queries to explicit `:as_of` parameters, guaranteeing that regenerating an evidence pack years later yields an identical canonical JSON SHA-256 hash (`result_sha256`).
+Insurance underwriting verifies the risk state as of a contract renewal reference date (`as_of`). System wall-clock queries (`NOW()`, `CURRENT_DATE`) produce varying results depending on execution time. Findura binds all temporal queries to explicit `:as_of` parameters, guaranteeing that regenerating an evidence pack years later yields an identical canonical JSON SHA-256 hash (`result_sha256`).

@@ -1,4 +1,4 @@
--- Inspectra Core Schema (PostgreSQL / Pattern 3)
+-- Findura Core Schema (PostgreSQL / Pattern 3)
 -- Version: 1.0.0
 -- Defined according to ONTOLOGY_CORE_INSPECTION.md and HARNESS_ARCHITECTURE.md
 
