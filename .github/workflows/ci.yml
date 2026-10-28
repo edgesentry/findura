@@ -68,7 +68,7 @@ jobs:
       - name: Run static type checking (mypy)
         run: uv run mypy
 
-      - name: Run automated tests (pytest)
+      - name: Run automated tests and coverage gate (pytest)
         env:
           POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432

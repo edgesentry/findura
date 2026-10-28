@@ -12,7 +12,7 @@ from harness.query import run_insurer_query
 from harness.resources import get_default_fixture_path, get_default_mapping_path
 
 
-def main():
+def main(argv: list[str] | None = None):
     parser = argparse.ArgumentParser(
         prog="harness",
         description="Findura deterministic inspection agent harness CLI",
@@ -58,7 +58,7 @@ def main():
         "--output", default=None, help="Path to output evidence pack JSON"
     )
 
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     conn = get_connection()
     init_db(conn)
