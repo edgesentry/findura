@@ -1,0 +1,75 @@
+id: source-csv-synthetic
+version: "1"
+from: csv.synthetic_inspection
+to: insp.core
+rules:
+  - source: defect_text
+    target: insp:statement
+    transform: rename
+    on_missing: omit
+  - source: inspection_date
+    target: insp:conductedOn
+    transform:
+      op: parse_date
+      pattern: "%Y-%m-%d"
+    on_missing: omit
+  - source: status
+    target: insp:completed
+    transform:
+      op: enum_map
+      values:
+        done: true
+        open: false
+    on_missing: omit
+  - source: completion_date
+    target: insp:completedOn
+    transform:
+      op: parse_date
+      pattern: "%Y-%m-%d"
+    on_missing: omit
+  - source: asset_and_building
+    target:
+      - insp:assetKey
+      - insp:buildingKey
+    transform:
+      op: split
+      separator: "|"
+    on_missing: omit
+  - source: inspection_id
+    target: insp:inspectionKey
+    transform: rename
+    on_missing: omit
+  - source: inspection_kind
+    target: insp:inspectionKind
+    transform: rename
+    on_missing: omit
+  - source: inspector_role
+    target: insp:conductedBy
+    transform: rename
+    on_missing: omit
+  - source: finding_id
+    target: insp:findingKey
+    transform: rename
+    on_missing: omit
+  - source: found_date
+    target: insp:foundOn
+    transform:
+      op: parse_date
+      pattern: "%Y-%m-%d"
+    on_missing: omit
+  - source: due_date
+    target: insp:dueOn
+    transform:
+      op: parse_date
+      pattern: "%Y-%m-%d"
+    on_missing: omit
+  - source: detection_id
+    target: insp:detectionKey
+    transform: rename
+    on_missing: omit
+  - source: detected_date
+    target: insp:detectedOn
+    transform:
+      op: parse_date
+      pattern: "%Y-%m-%d"
+    on_missing: omit

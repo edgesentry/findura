@@ -1,0 +1,10 @@
+id: insurer
+name: Insurer Profile
+version: "1"
+query_version: insurer-open-findings-v1
+description: |
+  Profile for insurance renewal and underwriting view.
+  Outputs open findings prioritized by overdue status and completed remediations.
+queries:
+  open_findings: queries/insurer_open_findings_v1.sql
+  completed_remediations: queries/insurer_completed_remediations_v1.sql
