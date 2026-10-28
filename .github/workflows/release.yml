@@ -35,7 +35,8 @@ jobs:
 
       - name: Install uv
         run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
+          # Pinned to uv 0.13.6; bump by updating the version in this URL (see https://github.com/astral-sh/uv/releases)
+          curl -LsSf https://astral.sh/uv/0.13.6/install.sh | sh
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Set up Python
