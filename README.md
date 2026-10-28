@@ -1,84 +1,84 @@
 # Inspectra
 
-**Inspectra** は、運用中建物の点検・是正記録を扱う共通点検オントロジーおよび決定論的エージェントハーネスのオープンソース（Apache-2.0）コア実装です。
+**Inspectra** is an open-source (Apache-2.0) core implementation of a common inspection ontology and deterministic agent harness for operational building inspection and remediation records.
 
-損害保険会社（火災保険・財物保険）の更改前に、既存の点検ツール（カミナシ等）の画面を置き換えることなく、中立なデータ連携層として未是正指摘・期限超過・是正完了の証拠パックを完全な再現性をもって提供します。
+Prior to property & casualty (fire and property insurance) renewals, Inspectra serves as a neutral data integration layer without replacing existing inspection frontends (e.g., Kaminashi [カミナシ]), providing evidence packs for open findings, overdue deadlines, and completed remediations with complete reproducibility.
 
 ---
 
-## 主な機能（フェーズ 1：最小決定論コアと損保プロファイル MVP）
+## Key Features (Phase 1: Minimal Deterministic Core and Insurer Profile MVP)
 
-- **共通点検オントロジー（8クラス・5制約）**:
+- **Common Inspection Ontology (8 Core Classes & 5 Shapes)**:
   - `Building`, `Asset`, `Inspection`, `Finding`, `Deadline`, `Remediation`, `Detection`, `SourceRecord`
-  - 5つの形状制約（`FindingHasDeadlineShape`, `CompletedRemediationHasDateShape`, `DateImpliesCompletedShape`, `InspectionHasOneAssetShape`, `NoFabricatedValueShape`）
-- **決定論ハーネス**:
-  - 取り込み（`ingest`）: 生バイトの SHA-256 保存と項目の出所保持
-  - 正規化（`normalize`）: 承認済みマッピング YAML（v0）による純粋関数変換
-  - データベース格納（`loader`）: JSON Schema 検証と正本格納／違反隔離（`quarantine_records`）
-  - 照会（`query`）: 基準日 `as_of` に基づく未是正・期限超過・完了の決定論的 SQL
-  - 証拠パック（`pack`）: 更改前一覧・マニフェスト・`result_sha256` の生成
-- **再現性**: 同一入力・同一版・同一基準日に対して、二回実行しても完全に同一の `result_sha256` を保証。
-- **点時間（Point-in-time）照会**:
-  - `open_findings`: 基準日 `as_of` 以前に発見され、`as_of` 時点で未是正（未完了または `as_of` より後に是正完了）の指摘を抽出。
-  - `completed_remediations`: 基準日 `as_of` 以前に完了した是正のみを抽出。
-  - `NOW()` / `CURRENT_DATE` 等の壁時計関数は一切排除され、過去の任意の基準日における状態を決定論的に再現。
+  - 5 Shape Constraints (`FindingHasDeadlineShape`, `CompletedRemediationHasDateShape`, `DateImpliesCompletedShape`, `InspectionHasOneAssetShape`, `NoFabricatedValueShape`)
+- **Deterministic Harness**:
+  - Ingestion (`ingest`): Raw-byte SHA-256 ingestion with property-level provenance tracking
+  - Normalization (`normalize`): Pure-function transformation driven by approved mapping YAML (v0)
+  - Database Loading (`loader`): JSON Schema validation with canonical core table storage vs. quarantined violations (`quarantine_records`)
+  - Query (`query`): Parameter-bound deterministic SQL based on reference date `as_of` for open findings, overdues, and completed remediations
+  - Evidence Pack (`pack`): Generation of pre-renewal findings manifest with embedded canonical JSON `result_sha256`
+- **Reproducibility Guarantee**: Identical `result_sha256` guaranteed across repeated runs given the same inputs, version, and reference date (`as_of`).
+- **Point-in-Time Query Semantics**:
+  - `open_findings`: Retrieves findings identified on or before `as_of` that remained unresolved at that reference point (uncompleted or completed after `as_of`).
+  - `completed_remediations`: Retrieves only remediations confirmed completed on or before `as_of`.
+  - Prohibits all wall-clock functions (`NOW()`, `CURRENT_DATE`, `CURRENT_TIMESTAMP`, `LOCALTIME`, `LOCALTIMESTAMP`) to ensure historical point-in-time states can be deterministically reproduced.
 
 ---
 
-## ディレクトリ構成
+## Directory Structure
 
 ```text
 inspectra/
-├── schema/                 # テーブル定義（tables.sql）および 5つの JSON Schema
-├── ontology/               # オントロジー定義（フェーズ 3 で RDF/SHACL を配置）
-├── mappings/sources/       # マッピング記法 v0 (source_csv_synthetic.yaml)
-├── queries/                # 決定論的照会 SQL (insurer-open-findings-v1)
-├── profiles/insurer/       # 損保向けプロファイル骨格 (profile.yaml)
-├── fixtures/synthetic/     # 公開様式対応表と合成データ 20件、期待判定表
-├── harness/                # エージェントハーネス実装 (ingest, normalize, loader, query, pack, cli)
-└── tests/                  # S1〜S4, S6 の完了判定自動テストスイート
+├── schema/                 # Database schema (tables.sql) and 5 JSON Schema shapes
+├── ontology/               # Ontology definitions (RDF/SHACL vocabularies planned for Phase 3)
+├── mappings/sources/       # Mapping definitions v0 (source_csv_synthetic.yaml)
+├── queries/                # Deterministic query SQL (insurer-open-findings-v1, completed-remediations-v1)
+├── profiles/insurer/       # Insurer profile skeleton (profile.yaml)
+├── fixtures/synthetic/     # Statutory form alignment table, 20 synthetic records, and expected verdicts
+├── harness/                # Agent harness implementation (ingest, normalize, loader, query, pack, cli)
+└── tests/                  # Automated test suite for S1–S4, S6 acceptance criteria
 ```
 
 ---
 
-## セットアップと実行
+## Setup and Execution
 
-### 1. PostgreSQL の起動
+### 1. Start PostgreSQL
 
 ```bash
 docker compose up -d
 ```
 
-### 2. 依存関係のインストール
+### 2. Install Dependencies
 
 ```bash
 uv sync
 ```
 
-### 3. テストの実行
+### 3. Run Automated Tests
 
 ```bash
 uv run pytest -v
 ```
 
-### 4. CLI の実行例
+### 4. CLI Execution Examples
 
 ```bash
-# 取り込み
+# Ingest raw source data
 uv run harness ingest fixtures/synthetic/synthetic_inspections.csv
 
-# 正規化と格納（適合は正本へ、違反は隔離表へ）
+# Normalize and load (conforming records to core tables, non-conforming to quarantine)
 uv run harness normalize --mapping mappings/sources/source_csv_synthetic.yaml
 
-# 損保プロファイルの照会（基準日 2026-10-27）
+# Query insurer profile (reference date: 2026-10-27)
 uv run harness query --profile insurer --as-of 2026-10-27
 
-# 証拠パックの生成
+# Build evidence pack
 uv run harness pack --profile insurer --as-of 2026-10-27 --output evidence_pack.json
 ```
 
 ---
 
-## ライセンス
+## License
 
 [Apache License 2.0](LICENSE)
