@@ -1,8 +1,10 @@
 -- Query Version: insurer-open-findings-v1
--- Description: Deterministic insurer profile query for renewal view
--- Requires %(as_of)s::date parameter; no current clock functions permitted
+-- Description: Deterministic insurer profile point-in-time renewal query for open findings.
+-- Semantics:
+--   Selects findings discovered on or before %(as_of)s::date that were NOT yet remediated
+--   as of the reference date (either uncompleted, or completed strictly after as_of).
+-- Parameter: %(as_of)s::date (strictly bound, wall-clock functions forbidden).
 
--- 1. Open Findings (unremediated defects)
 SELECT
     b.building_key AS building,
     a.asset_key AS asset,
@@ -18,7 +20,12 @@ JOIN assets a ON i.asset_id = a.id
 JOIN buildings b ON a.building_id = b.id
 JOIN deadlines d ON d.finding_id = f.id
 JOIN remediations r ON r.finding_id = f.id
-WHERE r.completed = FALSE
+WHERE f.found_on <= %(as_of)s::date
+  AND (
+      r.completed = FALSE
+      OR r.completed_on IS NULL
+      OR r.completed_on > %(as_of)s::date
+  )
 ORDER BY
     b.building_key ASC,
     (d.due_on < %(as_of)s::date) DESC,

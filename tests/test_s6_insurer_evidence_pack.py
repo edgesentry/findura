@@ -1,6 +1,7 @@
 import uuid
 from pathlib import Path
 
+from harness.db import truncate_all_tables
 from harness.ingest import ingest_file
 from harness.loader import load_records
 from harness.models import RunManifest
@@ -12,8 +13,11 @@ from harness.query import run_insurer_query
 def test_s6_evidence_pack_regeneration_and_schema(db_conn, repo_root: Path):
     """S6 Exit Criteria:
 
-    Evidence pack contains required manifest fields, no forbidden rating/underwriting fields,
-    and the same query result can be regenerated from pack parameters.
+    1. Evidence pack contains required manifest fields and result_sha256.
+    2. No forbidden rating/underwriting fields exist in pack or result.
+    3. Self-validation: result_sha256 matches canonical hash of the 7 fields in pack.
+    4. Genuine regeneration: Wipe DB, re-ingest raw data using only pack parameters,
+       re-query at as_of, and confirm exact result & hash match.
     """
     csv_path = repo_root / "fixtures" / "synthetic" / "synthetic_inspections.csv"
     mapping_path = (
@@ -51,6 +55,7 @@ def test_s6_evidence_pack_regeneration_and_schema(db_conn, repo_root: Path):
     assert pack["input_sha256"] == batch.input_sha256
     assert pack["as_of"] == as_of
     assert pack["profile"] == "insurer"
+    assert "result_sha256" in pack
     assert "result" in pack
 
     # Check forbidden underwriting/pricing fields
@@ -66,14 +71,8 @@ def test_s6_evidence_pack_regeneration_and_schema(db_conn, repo_root: Path):
         assert k not in pack
         assert k not in pack["result"]
 
-    # Regeneration verification: run query using pack's parameters
-    regenerated_result = run_insurer_query(
-        db_conn, as_of=pack["as_of"], profile_dir=repo_root
-    )
-    assert regenerated_result == pack["result"]
-
-    # Compute hash over original and regenerated result
-    orig_hash = compute_result_sha256(
+    # Verify pack's own result_sha256 matches its 7 fields
+    expected_self_hash = compute_result_sha256(
         as_of=pack["as_of"],
         input_sha256=pack["input_sha256"],
         mapping_version=pack["mapping_version"],
@@ -82,6 +81,35 @@ def test_s6_evidence_pack_regeneration_and_schema(db_conn, repo_root: Path):
         query_version=pack["query_version"],
         result=pack["result"],
     )
+    assert pack["result_sha256"] == expected_self_hash
+
+    # Genuine Regeneration Verification:
+    # 1. Completely wipe database
+    truncate_all_tables(db_conn)
+
+    # 2. Re-ingest and re-normalize raw data solely guided by pack's input_sha256 & versions
+    re_batch = ingest_file(csv_path, db_conn)
+    assert re_batch.input_sha256 == pack["input_sha256"]
+
+    re_mapping = load_mapping(mapping_path)
+    assert str(re_mapping.get("version", "1")) == pack["mapping_version"]
+
+    re_records = normalize_batch(re_batch, re_mapping)
+    load_records(
+        re_records,
+        db_conn,
+        input_sha256=re_batch.input_sha256,
+        ontology_version=pack["ontology_version"],
+        mapping_version=pack["mapping_version"],
+    )
+
+    # 3. Re-run query using pack's as_of and profile
+    regenerated_result = run_insurer_query(
+        db_conn, as_of=pack["as_of"], profile_dir=repo_root
+    )
+
+    # 4. Assert exact equality of reconstructed result and hash
+    assert regenerated_result == pack["result"]
 
     regen_hash = compute_result_sha256(
         as_of=pack["as_of"],
@@ -92,5 +120,4 @@ def test_s6_evidence_pack_regeneration_and_schema(db_conn, repo_root: Path):
         query_version=pack["query_version"],
         result=regenerated_result,
     )
-
-    assert orig_hash == regen_hash
+    assert regen_hash == pack["result_sha256"]

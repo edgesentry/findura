@@ -38,10 +38,20 @@ def run_insurer_query(
             lines = [line for line in sql.splitlines() if not line.strip().startswith("--")]
             return "\n".join(lines).upper()
 
-        if "CURRENT_DATE" in _strip_comments(open_sql) or "CURRENT_DATE" in _strip_comments(comp_sql):
-            raise ValueError(
-                "CURRENT_DATE is not permitted in deterministic query definitions."
-            )
+        forbidden_wall_clock = [
+            "CURRENT_DATE",
+            "NOW()",
+            "CURRENT_TIMESTAMP",
+            "LOCALTIME",
+            "LOCALTIMESTAMP",
+        ]
+        open_upper = _strip_comments(open_sql)
+        comp_upper = _strip_comments(comp_sql)
+        for term in forbidden_wall_clock:
+            if term in open_upper or term in comp_upper:
+                raise ValueError(
+                    f"Wall-clock function '{term}' is not permitted in deterministic query definitions."
+                )
 
         cur.execute(open_sql, {"as_of": as_of})
         for row in cur.fetchall():

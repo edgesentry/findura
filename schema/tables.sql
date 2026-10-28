@@ -95,7 +95,8 @@ CREATE TABLE IF NOT EXISTS value_provenance (
     source_record_id VARCHAR(64) NOT NULL REFERENCES source_records(id),
     source_field_id VARCHAR(128) NOT NULL REFERENCES source_fields(id),
     source_field_name TEXT NOT NULL,
-    source_field_value TEXT NOT NULL
+    source_field_value TEXT NOT NULL,
+    CONSTRAINT value_provenance_unique UNIQUE (core_table, core_id, property_name, source_field_id)
 );
 
 -- Quarantine records for constraint violations
@@ -108,5 +109,6 @@ CREATE TABLE IF NOT EXISTS quarantine_records (
     reason TEXT NOT NULL,
     rejected_record JSONB NOT NULL,
     run_id TEXT NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT quarantine_records_unique UNIQUE (run_id, input_sha256, violated_shape, reason)
 );

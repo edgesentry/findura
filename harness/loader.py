@@ -85,6 +85,7 @@ def load_records(
                         violated_shape, reason, rejected_record, run_id
                     )
                     VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    ON CONFLICT DO NOTHING
                     """,
                     (
                         input_sha256,
@@ -129,8 +130,9 @@ def load_records(
                         INSERT INTO inspections (inspection_key, asset_id, conducted_on, inspection_kind, conducted_by)
                         VALUES (%s, %s, %s, %s, %s)
                         ON CONFLICT (inspection_key) DO UPDATE SET
-                            asset_id = EXCLUDED.asset_id,
-                            conducted_on = EXCLUDED.conducted_on
+                            conducted_on = EXCLUDED.conducted_on,
+                            inspection_kind = EXCLUDED.inspection_kind,
+                            conducted_by = EXCLUDED.conducted_by
                         RETURNING id
                         """,
                         (
@@ -217,6 +219,7 @@ def load_records(
                                 source_field_name, source_field_value
                             )
                             VALUES (%s, %s, %s, %s, %s, %s, %s)
+                            ON CONFLICT DO NOTHING
                             """,
                             (
                                 core_table,

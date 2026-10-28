@@ -7,7 +7,7 @@ from harness.ingest import ingest_file
 from harness.loader import load_records
 from harness.models import RunManifest
 from harness.normalize import load_mapping, normalize_batch
-from harness.pack import build_evidence_pack, compute_result_sha256
+from harness.pack import build_evidence_pack
 from harness.query import run_insurer_query
 
 
@@ -100,6 +100,20 @@ def main():
         file_path = "fixtures/synthetic/synthetic_inspections.csv"
         batch = ingest_file(file_path, conn)
         mapping = load_mapping("mappings/sources/source_csv_synthetic.yaml")
+
+        # Ensure DB has data
+        with conn.cursor() as cur:
+            cur.execute("SELECT COUNT(*) AS cnt FROM findings;")
+            if cur.fetchone()["cnt"] == 0:
+                records = normalize_batch(batch, mapping)
+                load_records(
+                    records,
+                    conn,
+                    input_sha256=batch.input_sha256,
+                    ontology_version="1",
+                    mapping_version=str(mapping.get("version", "1")),
+                )
+
         result = run_insurer_query(conn, as_of=args.as_of)
 
         run_id = str(uuid.uuid4())
@@ -113,15 +127,7 @@ def main():
         )
 
         pack = build_evidence_pack(manifest, profile=args.profile, result=result)
-        result_hash = compute_result_sha256(
-            as_of=args.as_of,
-            input_sha256=batch.input_sha256,
-            mapping_version=manifest.mapping_version,
-            ontology_version=manifest.ontology_version,
-            profile=args.profile,
-            query_version=manifest.query_version,
-            result=result,
-        )
+        result_hash = pack["result_sha256"]
 
         out_json = json.dumps(pack, indent=2, ensure_ascii=False)
         if args.output:

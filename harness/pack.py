@@ -37,9 +37,22 @@ def build_evidence_pack(
     manifest: RunManifest,
     profile: str,
     result: dict[str, Any],
+    result_sha256: str | None = None,
 ) -> dict[str, Any]:
     """Builds standard evidence pack JSON without rating or pricing fields."""
+    if result_sha256 is None:
+        result_sha256 = compute_result_sha256(
+            as_of=manifest.as_of,
+            input_sha256=manifest.input_sha256,
+            mapping_version=manifest.mapping_version,
+            ontology_version=manifest.ontology_version,
+            profile=profile,
+            query_version=manifest.query_version,
+            result=result,
+        )
+
     pack = manifest.to_dict()
     pack["profile"] = profile
+    pack["result_sha256"] = result_sha256
     pack["result"] = result
     return pack
