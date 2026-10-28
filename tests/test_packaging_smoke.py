@@ -5,6 +5,7 @@ import subprocess
 import zipfile
 from pathlib import Path
 
+from harness import __version__
 from harness.db import init_db
 from harness.query import run_insurer_query
 from harness.resources import (
@@ -87,6 +88,7 @@ def test_wheel_contains_all_runtime_assets(tmp_path: Path):
         ]
         assert len(metadata_entries) == 1
         metadata_text = zf.read(metadata_entries[0]).decode("utf-8")
+        assert f"Version: {__version__}" in metadata_text
         assert "License-Expression: Apache-2.0" in metadata_text
         assert "Author-email: Yohei Onishi <yohei.onishi11@gmail.com>" in metadata_text
         assert "Keywords: " in metadata_text
