@@ -65,6 +65,9 @@ jobs:
       - name: Run static analysis (ruff check)
         run: uv run ruff check .
 
+      - name: Run static type checking (mypy)
+        run: uv run mypy
+
       - name: Run automated tests (pytest)
         env:
           POSTGRES_HOST: localhost
