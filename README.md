@@ -45,6 +45,8 @@ findura/
 
 ## Setup and Execution
 
+Findura requires Python 3.12+ (tested on Python 3.12 and 3.13 in CI).
+
 ### 1. Start PostgreSQL
 
 ```bash

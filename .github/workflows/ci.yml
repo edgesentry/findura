@@ -9,9 +9,19 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
+    name: test (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
 
     services:
       postgres:
@@ -54,10 +64,10 @@ jobs:
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Set up Python
-        run: uv python install 3.12
+        run: uv python install ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: uv sync
+        run: uv sync --python ${{ matrix.python-version }}
 
       - name: Run code formatting check (ruff format)
         run: uv run ruff format --check .
@@ -87,7 +97,7 @@ jobs:
         run: |
           uv build --wheel --out-dir /tmp/smoke-dist
           wheel_file=$(ls /tmp/smoke-dist/findura-*.whl | head -n 1)
-          uv venv /tmp/smoke-env
+          uv venv /tmp/smoke-env --python ${{ matrix.python-version }}
           uv pip install --python /tmp/smoke-env/bin/python "$wheel_file"
           cd /tmp
           /tmp/smoke-env/bin/python -c "

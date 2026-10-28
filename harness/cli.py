@@ -61,82 +61,85 @@ def main(argv: list[str] | None = None):
     args = parser.parse_args(argv)
 
     conn = get_connection()
-    init_db(conn)
+    try:
+        init_db(conn)
 
-    if args.command == "ingest":
-        batch = ingest_file(args.file, conn)
-        print(f"Ingested: {batch.raw_locator}")
-        print(f"input_sha256: {batch.input_sha256}")
-        print(f"Rows: {len(batch.rows)}")
+        if args.command == "ingest":
+            batch = ingest_file(args.file, conn)
+            print(f"Ingested: {batch.raw_locator}")
+            print(f"input_sha256: {batch.input_sha256}")
+            print(f"Rows: {len(batch.rows)}")
 
-    elif args.command == "review":
-        print("ReviewGate: 0 pending candidates in queue (Phase 1 mode).")
+        elif args.command == "review":
+            print("ReviewGate: 0 pending candidates in queue (Phase 1 mode).")
 
-    elif args.command == "normalize":
-        file_path = args.file or str(get_default_fixture_path())
-        mapping_path = args.mapping or str(get_default_mapping_path())
-        batch = ingest_file(file_path, conn)
-        mapping = load_mapping(mapping_path)
-        records = normalize_batch(batch, mapping)
-        verdicts = load_records(
-            records,
-            conn,
-            input_sha256=batch.input_sha256,
-            ontology_version="1",
-            mapping_version=str(mapping.get("version", "1")),
-        )
-        accepted = sum(1 for v in verdicts if v.accepted)
-        quarantined = sum(1 for v in verdicts if not v.accepted)
-        print("Normalization & Graph Loading complete:")
-        print(f"  Accepted: {accepted}")
-        print(f"  Quarantined: {quarantined}")
+        elif args.command == "normalize":
+            file_path = args.file or str(get_default_fixture_path())
+            mapping_path = args.mapping or str(get_default_mapping_path())
+            batch = ingest_file(file_path, conn)
+            mapping = load_mapping(mapping_path)
+            records = normalize_batch(batch, mapping)
+            verdicts = load_records(
+                records,
+                conn,
+                input_sha256=batch.input_sha256,
+                ontology_version="1",
+                mapping_version=str(mapping.get("version", "1")),
+            )
+            accepted = sum(1 for v in verdicts if v.accepted)
+            quarantined = sum(1 for v in verdicts if not v.accepted)
+            print("Normalization & Graph Loading complete:")
+            print(f"  Accepted: {accepted}")
+            print(f"  Quarantined: {quarantined}")
 
-    elif args.command == "query":
-        result = run_insurer_query(conn, as_of=args.as_of)
-        print(json.dumps(result, indent=2, ensure_ascii=False))
+        elif args.command == "query":
+            result = run_insurer_query(conn, as_of=args.as_of)
+            print(json.dumps(result, indent=2, ensure_ascii=False))
 
-    elif args.command == "pack":
-        # Run query and build evidence pack
-        file_path = str(get_default_fixture_path())
-        batch = ingest_file(file_path, conn)
-        mapping = load_mapping(get_default_mapping_path())
+        elif args.command == "pack":
+            # Run query and build evidence pack
+            file_path = str(get_default_fixture_path())
+            batch = ingest_file(file_path, conn)
+            mapping = load_mapping(get_default_mapping_path())
 
-        # Ensure DB has data
-        with conn.cursor() as cur:
-            cur.execute("SELECT COUNT(*) AS cnt FROM findings;")
-            if cur.fetchone()["cnt"] == 0:
-                records = normalize_batch(batch, mapping)
-                load_records(
-                    records,
-                    conn,
-                    input_sha256=batch.input_sha256,
-                    ontology_version="1",
-                    mapping_version=str(mapping.get("version", "1")),
-                )
+            # Ensure DB has data
+            with conn.cursor() as cur:
+                cur.execute("SELECT COUNT(*) AS cnt FROM findings;")
+                if cur.fetchone()["cnt"] == 0:
+                    records = normalize_batch(batch, mapping)
+                    load_records(
+                        records,
+                        conn,
+                        input_sha256=batch.input_sha256,
+                        ontology_version="1",
+                        mapping_version=str(mapping.get("version", "1")),
+                    )
 
-        result = run_insurer_query(conn, as_of=args.as_of)
+            result = run_insurer_query(conn, as_of=args.as_of)
 
-        run_id = str(uuid.uuid4())
-        manifest = RunManifest(
-            run_id=run_id,
-            ontology_version="1",
-            mapping_version=str(mapping.get("version", "1")),
-            query_version="insurer-open-findings-v1",
-            input_sha256=batch.input_sha256,
-            as_of=args.as_of,
-        )
+            run_id = str(uuid.uuid4())
+            manifest = RunManifest(
+                run_id=run_id,
+                ontology_version="1",
+                mapping_version=str(mapping.get("version", "1")),
+                query_version="insurer-open-findings-v1",
+                input_sha256=batch.input_sha256,
+                as_of=args.as_of,
+            )
 
-        pack = build_evidence_pack(manifest, profile=args.profile, result=result)
-        result_hash = pack["result_sha256"]
+            pack = build_evidence_pack(manifest, profile=args.profile, result=result)
+            result_hash = pack["result_sha256"]
 
-        out_json = json.dumps(pack, indent=2, ensure_ascii=False)
-        if args.output:
-            with open(args.output, "w", encoding="utf-8") as f:
-                f.write(out_json)
-            print(f"Evidence pack written to: {args.output}")
-        else:
-            print(out_json)
-        print(f"result_sha256: {result_hash}")
+            out_json = json.dumps(pack, indent=2, ensure_ascii=False)
+            if args.output:
+                with open(args.output, "w", encoding="utf-8") as f:
+                    f.write(out_json)
+                print(f"Evidence pack written to: {args.output}")
+            else:
+                print(out_json)
+            print(f"result_sha256: {result_hash}")
+    finally:
+        conn.close()
 
 
 if __name__ == "__main__":
